@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import TrashIcon from './TrashIcon'
 import TagManager from './TagManager'
@@ -11,12 +11,78 @@ const COLOR_PALETTE = [
 ]
 
 function App() {
-  const [participants, setParticipants] = useState([])
-  const [tags, setTags] = useState([])
+  const [participants, setParticipants] = useState(() => {
+    const saved = localStorage.getItem('ttrpg-data')
+    if (saved) {
+      try {
+        return JSON.parse(saved).participants || []
+      } catch (e) {
+        console.error('Failed to load participants:', e)
+      }
+    }
+    return []
+  })
+
+  const [tags, setTags] = useState(() => {
+    const saved = localStorage.getItem('ttrpg-data')
+    if (saved) {
+      try {
+        return JSON.parse(saved).tags || []
+      } catch (e) {
+        console.error('Failed to load tags:', e)
+      }
+    }
+    return []
+  })
+
+  const [nextTagId, setNextTagId] = useState(() => {
+    const saved = localStorage.getItem('ttrpg-data')
+    if (saved) {
+      try {
+        return JSON.parse(saved).nextTagId || 1
+      } catch (e) {
+        console.error('Failed to load nextTagId:', e)
+      }
+    }
+    return 1
+  })
+
+  const [currentRound, setCurrentRound] = useState(() => {
+    const saved = localStorage.getItem('ttrpg-data')
+    if (saved) {
+      try {
+        return JSON.parse(saved).currentRound || 1
+      } catch (e) {
+        console.error('Failed to load currentRound:', e)
+      }
+    }
+    return 1
+  })
+
+  const [currentParticipantIndex, setCurrentParticipantIndex] = useState(() => {
+    const saved = localStorage.getItem('ttrpg-data')
+    if (saved) {
+      try {
+        return JSON.parse(saved).currentParticipantIndex || 0
+      } catch (e) {
+        console.error('Failed to load currentParticipantIndex:', e)
+      }
+    }
+    return 0
+  })
+
   const [selectedParticipantId, setSelectedParticipantId] = useState(null)
-  const [nextTagId, setNextTagId] = useState(1)
-  const [currentRound, setCurrentRound] = useState(1)
-  const [currentParticipantIndex, setCurrentParticipantIndex] = useState(0)
+
+  // Save to localStorage whenever state changes
+  useEffect(() => {
+    localStorage.setItem('ttrpg-data', JSON.stringify({
+      participants,
+      tags,
+      nextTagId,
+      currentRound,
+      currentParticipantIndex
+    }))
+  }, [participants, tags, nextTagId, currentRound, currentParticipantIndex])
 
   const sortedParticipants = [...participants].sort((a, b) => b.initiative - a.initiative)
 
