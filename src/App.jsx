@@ -183,6 +183,17 @@ function App() {
     return sortedParticipants[currentParticipantIndex]
   }
 
+  const clearAllData = () => {
+    if (window.confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+      setParticipants([])
+      setTags([])
+      setNextTagId(1)
+      setCurrentRound(1)
+      setCurrentParticipantIndex(0)
+      localStorage.removeItem('ttrpg-data')
+    }
+  }
+
   return (
     <>
       <h1>TTRPG Round Table</h1>
@@ -213,6 +224,9 @@ function App() {
 
       <button onClick={addParticipant} className="add-button">
         + Add Participant
+      </button>
+      <button onClick={clearAllData} className="clear-button">
+        Clear All
       </button>
 
       {participants.length === 0 ? (

@@ -77,6 +77,15 @@ h1, h2 {
   background-color: #5a8c69;
 }
 
+.clear-button {
+  background-color: #5a3a3a;
+  border-color: #7a5a5a;
+}
+
+.clear-button:hover {
+  background-color: #6a4a4a;
+}
+
 .empty-state {
   text-align: center;
   color: #888;
