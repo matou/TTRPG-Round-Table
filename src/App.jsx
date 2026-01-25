@@ -15,13 +15,21 @@ function App() {
   const [tags, setTags] = useState([])
   const [selectedParticipantId, setSelectedParticipantId] = useState(null)
   const [nextTagId, setNextTagId] = useState(1)
+  const [currentRound, setCurrentRound] = useState(1)
+  const [currentParticipantIndex, setCurrentParticipantIndex] = useState(0)
+
+  const sortedParticipants = [...participants].sort((a, b) => b.initiative - a.initiative)
 
   const addParticipant = () => {
     setParticipants([...participants, { id: participants.length + 1, name: 'New Participant', initiative: 0, hpCurrent: 0, hpMax: 0, tags: [] }])
   }
 
   const removeParticipant = (id) => {
-    setParticipants(participants.filter((participant) => participant.id !== id))
+    const newParticipants = participants.filter((participant) => participant.id !== id)
+    setParticipants(newParticipants)
+    if (currentParticipantIndex >= newParticipants.length && currentParticipantIndex > 0) {
+      setCurrentParticipantIndex(currentParticipantIndex - 1)
+    }
   }
 
   const updateParticipant = (id, field, value) => {
@@ -69,32 +77,94 @@ function App() {
     return tags.find(t => t.id === tagId)?.name || 'Unknown'
   }
 
+  const goToNextTurn = () => {
+    if (sortedParticipants.length === 0) return
+    
+    if (currentParticipantIndex >= sortedParticipants.length - 1) {
+      setCurrentRound(currentRound + 1)
+      setCurrentParticipantIndex(0)
+    } else {
+      setCurrentParticipantIndex(currentParticipantIndex + 1)
+    }
+  }
+
+  const goToPreviousTurn = () => {
+    if (sortedParticipants.length === 0) return
+    
+    if (currentParticipantIndex <= 0) {
+      if (currentRound > 1) {
+        setCurrentRound(currentRound - 1)
+        setCurrentParticipantIndex(sortedParticipants.length - 1)
+      }
+    } else {
+      setCurrentParticipantIndex(currentParticipantIndex - 1)
+    }
+  }
+
+  const goToNextRound = () => {
+    setCurrentRound(currentRound + 1)
+    setCurrentParticipantIndex(0)
+  }
+
+  const goToPreviousRound = () => {
+    if (currentRound > 1) {
+      setCurrentRound(currentRound - 1)
+      setCurrentParticipantIndex(0)
+    }
+  }
+
+  const getCurrentParticipant = () => {
+    return sortedParticipants[currentParticipantIndex]
+  }
+
   return (
     <>
       <h1>TTRPG Round Table</h1>
-      <div>
-        <button onClick={addParticipant}>
-          Add Participant
-        </button>
+      
+      <div className="round-controls">
+        <div className="round-info">
+          <h2>Round {currentRound}</h2>
+          {getCurrentParticipant() && (
+            <p className="current-turn">Current turn: <strong>{getCurrentParticipant().name}</strong></p>
+          )}
+        </div>
+        
+        <div className="button-group">
+          <button onClick={goToPreviousRound} disabled={currentRound === 1}>
+            ← Previous Round
+          </button>
+          <button onClick={goToPreviousTurn} disabled={sortedParticipants.length === 0}>
+            ← Previous Turn
+          </button>
+          <button onClick={goToNextTurn} disabled={sortedParticipants.length === 0}>
+            Next Turn →
+          </button>
+          <button onClick={goToNextRound}>
+            Next Round →
+          </button>
+        </div>
       </div>
-      <div>
-        <h2>Participants</h2>
-        {participants.length === 0 ? (
-          <p>No participants yet. Add one to get started!</p>
-        ) : (
-          <table className="participants-table">
-            <thead>
-              <tr>
-                <th>Initiative</th>
-                <th>Name</th>
-                <th>Tags</th>
-                <th>HP</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {[...participants].sort((a, b) => b.initiative - a.initiative).map((participant) => (
-                <tr key={participant.id}>
+
+      <button onClick={addParticipant} className="add-button">
+        + Add Participant
+      </button>
+
+      {participants.length === 0 ? (
+        <p className="empty-state">No participants yet. Add one to get started!</p>
+      ) : (
+        <table className="participants-table">
+          <thead>
+            <tr>
+              <th>Initiative</th>
+              <th>Name</th>
+              <th>Tags</th>
+              <th>HP</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedParticipants.map((participant, index) => (
+              <tr key={participant.id} className={index === currentParticipantIndex ? 'active-participant' : ''}>
                   <td>
                     <input
                       type="number"
@@ -178,7 +248,6 @@ function App() {
             </tbody>
           </table>
         )}
-      </div>
     </>
   )
 }
