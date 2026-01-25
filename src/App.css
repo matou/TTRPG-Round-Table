@@ -106,7 +106,7 @@ button:active {
 .participants-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   color: #e0e0e0;
 }
 
@@ -122,7 +122,7 @@ button:active {
 
 .participants-table th,
 .participants-table td {
-  padding: 0.75rem;
+  padding: 0.5rem 0.5rem;
 }
 
 .participants-table tbody td:first-child,
