@@ -6,7 +6,7 @@ function App() {
   const [participants, setParticipants] = useState([])
 
   const addParticipant = () => {
-    setParticipants([...participants, { id: participants.length + 1, name: 'New Participant', initiative: 0 }])
+    setParticipants([...participants, { id: participants.length + 1, name: 'New Participant', initiative: 0, hpCurrent: 0, hpMax: 0 }])
   }
 
   const removeParticipant = (id) => {
@@ -37,6 +37,7 @@ function App() {
               <tr>
                 <th>Initiative</th>
                 <th>Name</th>
+                <th>HP</th>
                 <th></th>
               </tr>
             </thead>
@@ -48,7 +49,7 @@ function App() {
                       type="number"
                       value={participant.initiative}
                       onChange={(e) => updateParticipant(participant.id, 'initiative', parseInt(e.target.value) || 0)}
-                      className="table-input"
+                      className="table-input initiative-input"
                     />
                   </td>
                   <td>
@@ -58,6 +59,23 @@ function App() {
                       onChange={(e) => updateParticipant(participant.id, 'name', e.target.value)}
                       className="table-input"
                     />
+                  </td>
+                  <td>
+                    <div className="hp-input-container">
+                      <input
+                        type="number"
+                        value={participant.hpCurrent ?? 0}
+                        onChange={(e) => updateParticipant(participant.id, 'hpCurrent', parseInt(e.target.value) || 0)}
+                        className="table-input hp-input"
+                      />
+                      <span className="hp-separator">/</span>
+                      <input
+                        type="number"
+                        value={participant.hpMax ?? 0}
+                        onChange={(e) => updateParticipant(participant.id, 'hpMax', parseInt(e.target.value) || 0)}
+                        className="table-input hp-input"
+                      />
+                    </div>
                   </td>
                   <td>
                     <button 

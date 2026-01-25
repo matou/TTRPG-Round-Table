@@ -118,3 +118,21 @@ button:active {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.hp-input-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hp-input,
+.initiative-input {
+  width: 5ch;
+  flex: none;
+}
+
+.hp-separator {
+  color: #888;
+  font-weight: 500;
+  user-select: none;
+}
