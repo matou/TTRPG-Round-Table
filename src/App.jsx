@@ -200,7 +200,7 @@ function App() {
                         onClick={() => setSelectedParticipantId(selectedParticipantId === participant.id ? null : participant.id)}
                         className="add-tag-button"
                       >
-                        + Add Tag
+                        +
                       </button>
                       {selectedParticipantId === participant.id && (
                         <TagManager
