@@ -21,7 +21,7 @@ function App() {
   const sortedParticipants = [...participants].sort((a, b) => b.initiative - a.initiative)
 
   const addParticipant = () => {
-    setParticipants([...participants, { id: participants.length + 1, name: 'New Participant', initiative: 0, hpCurrent: 0, hpMax: 0, tags: [] }])
+    setParticipants([...participants, { id: participants.length + 1, name: '', initiative: 0, hpCurrent: 0, hpMax: 0, tags: [] }])
   }
 
   const removeParticipant = (id) => {
@@ -177,6 +177,7 @@ function App() {
                     <input
                       type="text"
                       value={participant.name}
+                      placeholder='new participant'
                       onChange={(e) => updateParticipant(participant.id, 'name', e.target.value)}
                       className="table-input"
                     />
