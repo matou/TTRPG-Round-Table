@@ -8,16 +8,27 @@ a {
 }
 
 table {
-    width: 100%;
     border-collapse: collapse;
+    table-layout: auto;
 }
 
 td, th {
     border-bottom: 1px solid #333; /* Darker border for table cells */
     padding: 8px;
     text-align: left;
+    width: fit-content;
+    white-space: nowrap;
+}
+
+td:nth-child(2), th:nth-child(2) {
+    width: 100%;
 }
 
 tr.active-turn {
     background-color: #075b5e; /* Highlight color for active turn */
+}
+
+input[type="number"] {
+    appearance: textfield;
+    width: 4ch;
 }
