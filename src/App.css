@@ -6,3 +6,18 @@ body {
 a {
     color: #86c1fc; 
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th {
+    border-bottom: 1px solid #333; /* Darker border for table cells */
+    padding: 8px;
+    text-align: left;
+}
+
+tr.active-turn {
+    background-color: #075b5e; /* Highlight color for active turn */
+}
