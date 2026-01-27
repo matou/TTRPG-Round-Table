@@ -13,6 +13,7 @@ function participantTable(participants, setParticipants, turn) {
             <th>Initiative</th>
             <th>Name</th>
             <th>HP</th>
+            <th></th>
             </tr>
         </thead>
         <tbody>
