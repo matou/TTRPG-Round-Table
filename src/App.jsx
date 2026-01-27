@@ -22,8 +22,12 @@ function participantTable(participants, setParticipants) {
             <tr key={index}>
               <td><input type="number" value={participant.initiative} 
                     onChange={(e) => setParticipants(participants.map((p, i) => i === index ? {...p, initiative: parseInt(e.target.value)} : p))} /></td>
-              <td>{participant.name}</td>
-              <td>{participant.hpCurrent}/{participant.hpMax}</td>
+              <td><input type="text" value={participant.name} placeholder='New participant' onChange={(e) => setParticipants(participants.map((p, i) => i === index ? {...p, name: e.target.value} : p))}/></td>
+              <td>
+                <input type="number" value={participant.hpCurrent} onChange={(e) => setParticipants(participants.map((p, i) => i === index ? {...p, hpCurrent: parseInt(e.target.value)} : p))} />
+                /
+                <input type="number" value={participant.hpMax} onChange={(e) => setParticipants(participants.map((p, i) => i === index ? {...p, hpMax: parseInt(e.target.value)} : p))} />
+              </td>
               <td><button onClick={() => removeParticipant(participants, setParticipants, index)}>Remove</button></td>
             </tr>
           ))}
