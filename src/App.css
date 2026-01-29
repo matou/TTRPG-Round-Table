@@ -28,6 +28,12 @@ tr.active-turn {
     background-color: #075b5e; /* Highlight color for active turn */
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 input[type="number"] {
     appearance: textfield;
     width: 4ch;
