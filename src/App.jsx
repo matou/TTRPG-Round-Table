@@ -5,6 +5,30 @@ function removeParticipant(participants, setParticipants, participantIndexToRemo
     setParticipants(participants.filter((_, index) => index !== participantIndexToRemove))
 }
 
+function updateInitiative(participants, setParticipants, participantIndex, newInitiative) {
+    setParticipants(participants.map((participant, index) => 
+        index === participantIndex ? {...participant, initiative: newInitiative} : participant
+    ))
+}
+
+function updateName(participants, setParticipants, participantIndex, newName) {
+    setParticipants(participants.map((participant, index) => 
+        index === participantIndex ? {...participant, name: newName} : participant
+    ))
+}
+
+function updateCurrentHP(participants, setParticipants, participantIndex, newCurrentHP) {
+    setParticipants(participants.map((participant, index) => 
+        index === participantIndex ? {...participant, hpCurrent: newCurrentHP} : participant
+    ))
+}
+
+function updateMaxHP(participants, setParticipants, participantIndex, newMaxHP) {
+    setParticipants(participants.map((participant, index) => 
+        index === participantIndex ? {...participant, hpMax: newMaxHP} : participant
+    ))
+}
+
 function ParticipantTable(participants, setParticipants, turn) {
     return (
       <table>
@@ -23,12 +47,15 @@ function ParticipantTable(participants, setParticipants, turn) {
             <tr key={index}
                 className={turn === index ? 'active-turn' : ''}>
               <td><input type="number" value={participant.initiative} 
-                    onChange={(e) => setParticipants(participants.map((p, i) => i === index ? {...p, initiative: parseInt(e.target.value)} : p))} /></td>
-              <td><input type="text" value={participant.name} placeholder='New participant' onChange={(e) => setParticipants(participants.map((p, i) => i === index ? {...p, name: e.target.value} : p))}/></td>
+                    onChange={(e) => updateInitiative(participants, setParticipants, index, parseInt(e.target.value))} /></td>
+              <td><input type="text" value={participant.name} placeholder='New participant' 
+                    onChange={(e) => updateName(participants, setParticipants, index, e.target.value)} /></td>
               <td>
-                <input type="number" value={participant.hpCurrent} onChange={(e) => setParticipants(participants.map((p, i) => i === index ? {...p, hpCurrent: parseInt(e.target.value)} : p))} />
+                <input type="number" value={participant.hpCurrent} 
+                      onChange={(e) => updateCurrentHP(participants, setParticipants, index, parseInt(e.target.value))} />
                 /
-                <input type="number" value={participant.hpMax} onChange={(e) => setParticipants(participants.map((p, i) => i === index ? {...p, hpMax: parseInt(e.target.value)} : p))} />
+                <input type="number" value={participant.hpMax} 
+                      onChange={(e) => updateMaxHP(participants, setParticipants, index, parseInt(e.target.value))} />
               </td>
               <td><button onClick={() => removeParticipant(participants, setParticipants, index)}>Remove</button></td>
             </tr>
