@@ -5,7 +5,7 @@ function removeParticipant(participants, setParticipants, participantIndexToRemo
     setParticipants(participants.filter((_, index) => index !== participantIndexToRemove))
 }
 
-function participantTable(participants, setParticipants, turn) {
+function ParticipantTable(participants, setParticipants, turn) {
     return (
       <table>
         <thead>
@@ -38,7 +38,7 @@ function participantTable(participants, setParticipants, turn) {
     )
   }
 
-function roundTracker(round, setRound, turn, setTurn, size) {
+function RoundTracker(round, setRound, turn, setTurn, size) {
     const nextTurn = () => {
         if (turn + 1 >= size) {
             setTurn(0)
@@ -90,9 +90,9 @@ function App() {
         <button onClick={addParticipant}>+ Participant</button>
         <button onClick={clearParticipants}>Clear all</button>
 
-        {roundTracker(round, setRound, turn, setTurn, participants.length)}
+        {RoundTracker(round, setRound, turn, setTurn, participants.length)}
 
-        {participantTable(participants, setParticipants, turn)}
+        {ParticipantTable(participants, setParticipants, turn)}
       </div>
     </>
   )
