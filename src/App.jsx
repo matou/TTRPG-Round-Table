@@ -29,7 +29,7 @@ function updateMaxHP(participants, setParticipants, participantIndex, newMaxHP) 
     ))
 }
 
-function ParticipantTable(participants, setParticipants, turn) {
+function ParticipantTable({ participants, setParticipants, turn }) {
     return (
       <table>
         <thead>
@@ -65,7 +65,7 @@ function ParticipantTable(participants, setParticipants, turn) {
     )
   }
 
-function RoundTracker(round, setRound, turn, setTurn, size) {
+function RoundTracker({ round, setRound, turn, setTurn, size }) {
     const nextTurn = () => {
         if (turn + 1 >= size) {
             setTurn(0)
@@ -117,9 +117,19 @@ function App() {
         <button onClick={addParticipant}>+ Participant</button>
         <button onClick={clearParticipants}>Clear all</button>
 
-        {RoundTracker(round, setRound, turn, setTurn, participants.length)}
+        <RoundTracker 
+            round={round} 
+            setRound={setRound} 
+            turn={turn} 
+            setTurn={setTurn} 
+            size={participants.length} 
+        />
 
-        {ParticipantTable(participants, setParticipants, turn)}
+        <ParticipantTable 
+            participants={participants} 
+            setParticipants={setParticipants} 
+            turn={turn} 
+        />
       </div>
     </>
   )
