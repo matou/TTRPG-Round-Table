@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import TagManager from './TagManager.jsx'
 
 function removeParticipant(participants, setParticipants, participantIndexToRemove) {
     setParticipants(participants.filter((_, index) => index !== participantIndexToRemove))
@@ -29,13 +30,23 @@ function updateMaxHP(participants, setParticipants, participantIndex, newMaxHP) 
     ))
 }
 
+function addCondition(participants, setParticipants, participantIndex, newCondition) {
+    setParticipants(participants.map((participant, index) => 
+        index === participantIndex ? {...participant, conditions: [...participant.conditions, newCondition]} : participant
+    ))
+}
+
 function ParticipantTable({ participants, setParticipants, turn }) {
+    const [tagManagerParticpantIndex, setTagManagerParticpantIndex] = useState(null);
+
     return (
+      <>
       <table>
         <thead>
           <tr>
             <th>Initiative</th>
             <th>Name</th>
+            <th>Conditions</th>
             <th>HP</th>
             <th></th>
             </tr>
@@ -51,6 +62,14 @@ function ParticipantTable({ participants, setParticipants, turn }) {
               <td><input type="text" value={participant.name} placeholder='New participant' 
                     onChange={(e) => updateName(participants, setParticipants, index, e.target.value)} /></td>
               <td>
+                <div className='conditions'>
+                  <button onClick={() => setTagManagerParticpantIndex(index)}>+</button>
+                  {participant.conditions?.map((condition, conditionIndex) => (
+                      <span key={conditionIndex} className="condition">{condition}</span>
+                  ))}
+                </div>
+              </td>
+              <td>
                 <input type="number" value={participant.hpCurrent} 
                       onChange={(e) => updateCurrentHP(participants, setParticipants, index, parseInt(e.target.value))} />
                 /
@@ -62,6 +81,15 @@ function ParticipantTable({ participants, setParticipants, turn }) {
           ))}
         </tbody>
       </table>
+      { tagManagerParticpantIndex !== null &&
+        <TagManager 
+          tags={participants[tagManagerParticpantIndex].conditions || []}
+          onAddExistingCondition={(condition) => addCondition(participants, setParticipants, tagManagerParticpantIndex, condition)}
+          onAddNewCondition={(condition) => addCondition(participants, setParticipants, tagManagerParticpantIndex, condition)}
+          onClose={() => setTagManagerParticpantIndex(null)}
+        />
+      }
+      </>
     )
   }
 
@@ -99,9 +127,10 @@ function App() {
   const [participants, setParticipants] = useState([])
   const [round, setRound] = useState(1)
   const [turn, setTurn] = useState(0)
+  const [tags, setTags] = useState([])
 
   const addParticipant = () => {
-    const newParticipant = { initiative: 0, name: '', hpCurrent: 0, hpMax: 0 }
+    const newParticipant = { initiative: 0, name: '', hpCurrent: 0, hpMax: 0, conditions: ["test", "another"] }
     setParticipants([...participants, newParticipant])
   }
 
