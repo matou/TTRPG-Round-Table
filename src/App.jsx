@@ -30,13 +30,31 @@ function updateMaxHP(participants, setParticipants, participantIndex, newMaxHP) 
     ))
 }
 
-function addCondition(participants, setParticipants, participantIndex, newCondition) {
+function addConditionToParticipant(participants, setParticipants, participantIndex, newCondition) {
     setParticipants(participants.map((participant, index) => 
         index === participantIndex ? {...participant, conditions: [...participant.conditions, newCondition]} : participant
     ))
 }
 
-function ParticipantTable({ participants, setParticipants, turn }) {
+function removeConditionFromParticipant(participants, setParticipants, participantIndex, conditionIndex) {
+    setParticipants(participants.map((participant, index) => 
+        index === participantIndex ? {
+            ...participant, 
+            conditions: (participant.conditions || []).filter((_, i) => i !== conditionIndex),
+          }
+        : participant
+    ))
+}
+
+function addTag(tags, setTags, newTag) {
+    setTags([...tags, newTag])
+}
+
+function removeTag(tags, setTags, tagIndex) {
+    setTags(tags.filter((_, index) => index !== tagIndex))
+}
+
+function ParticipantTable({ participants, setParticipants, turn, tags, setTags }) {
     const [tagManagerParticpantIndex, setTagManagerParticpantIndex] = useState(null);
 
     return (
@@ -65,7 +83,14 @@ function ParticipantTable({ participants, setParticipants, turn }) {
                 <div className='conditions'>
                   <button onClick={() => setTagManagerParticpantIndex(index)}>+</button>
                   {participant.conditions?.map((condition, conditionIndex) => (
-                      <span key={conditionIndex} className="condition">{condition}</span>
+                      <span key={conditionIndex} className="condition">{condition}
+                        <button
+                          type="button"
+                          className='condition-remove'
+                          onClick={() => removeConditionFromParticipant(participants, setParticipants, index, conditionIndex)}>
+                          ×
+                        </button>
+                      </span>
                   ))}
                 </div>
               </td>
@@ -83,9 +108,12 @@ function ParticipantTable({ participants, setParticipants, turn }) {
       </table>
       { tagManagerParticpantIndex !== null &&
         <TagManager 
-          tags={participants[tagManagerParticpantIndex].conditions || []}
-          onAddExistingCondition={(condition) => addCondition(participants, setParticipants, tagManagerParticpantIndex, condition)}
-          onAddNewCondition={(condition) => addCondition(participants, setParticipants, tagManagerParticpantIndex, condition)}
+          tags={tags || []}
+          onAddExistingCondition={(condition) => addConditionToParticipant(participants, setParticipants, tagManagerParticpantIndex, condition)}
+          onAddNewCondition={(condition) => {
+            addConditionToParticipant(participants, setParticipants, tagManagerParticpantIndex, condition)
+            addTag(tags, setTags, condition)
+          }}
           onClose={() => setTagManagerParticpantIndex(null)}
         />
       }
@@ -130,7 +158,7 @@ function App() {
   const [tags, setTags] = useState([])
 
   const addParticipant = () => {
-    const newParticipant = { initiative: 0, name: '', hpCurrent: 0, hpMax: 0, conditions: ["test", "another"] }
+    const newParticipant = { initiative: 0, name: '', hpCurrent: 0, hpMax: 0, conditions: [] }
     setParticipants([...participants, newParticipant])
   }
 
@@ -158,6 +186,8 @@ function App() {
             participants={participants} 
             setParticipants={setParticipants} 
             turn={turn} 
+            tags={tags}
+            setTags={setTags}
         />
       </div>
     </>
